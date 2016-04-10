@@ -7,7 +7,7 @@ from subprocess import call
 if len(sys.argv) != 2:
 	sys.exit("Invalid number of parameters")
 
-if sys.argv[1] == "-update" || sys.argv[1] == "-u":
+if sys.argv[1] == "-update" or sys.argv[1] == "-u":
 	script_path = os.path.realpath(__file__)
 	new_file = requests.get('https://raw.githubusercontent.com/jovit/susy-test-runner/master/test-runner').text
 	out_file = open(script_path, 'w+')

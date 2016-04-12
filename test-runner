@@ -12,7 +12,7 @@ if sys.argv[1] == "-update" or sys.argv[1] == "-u":
 	new_file = requests.get('https://raw.githubusercontent.com/jovit/susy-test-runner/master/test-runner').text
 	out_file = open(script_path, 'w+')
 	out_file.write(new_file)
-	sys.exit("Updated script with success");
+	sys.exit("Test Runner updated with success");
 
 if not os.path.isfile(sys.argv[1]):
 	sys.exit("File '" + sys.argv[1] + "' not found.")

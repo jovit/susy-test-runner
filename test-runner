@@ -63,15 +63,28 @@ for i in range(0,6):
 
 	out_file = open('outfile', 'r')
 	output_resulted = out_file.read()
+	output_lines = output_resulted.splitlines()
+
+	debug_output = ""
+	real_output = ""
+	for line in output_lines:
+		if line[0 : 4] == "[DB]":
+			debug_output += line[4:] + '\n'
+		else:
+			real_output += line  + '\n'
+
 	out_file.close()
 
-	if output_resulted == expected_outputs[i]:
+	if real_output == expected_outputs[i]:
 		print "TEST "+str(i+1)+ '\033[92m' + " SUCCESS" + '\033[0m'
 	else:
 		failed += 1
 		print "TEST "+str(i+1) + '\033[91m' + " FAILED" + '\033[0m'
 		print "EXPECTED\n" + expected_outputs[i]
-		print "FOUND\n" + output_resulted
+		print "FOUND\n" + real_output
+
+	if debug_output != "":
+		print '\033[93m' + "DEBUG MESSAGES:" + '\033[0m\n' + debug_output
 
 print '\033[93m' + "------------------------------------------" + '\033[0m'
 print "Tests finished running with success"
@@ -83,4 +96,3 @@ else:
 os.remove('infile')
 os.remove('outfile')
 os.remove(file_name)
-	

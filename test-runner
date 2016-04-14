@@ -3,9 +3,12 @@ import os
 import requests
 import sys
 from subprocess import call
+import time
 
 if len(sys.argv) < 2:
 	sys.exit("Invalid number of parameters")
+
+monitore = False;
 
 if sys.argv[1] == "-update" or sys.argv[1] == "-u":
 	script_path = os.path.realpath(__file__)
@@ -13,6 +16,9 @@ if sys.argv[1] == "-update" or sys.argv[1] == "-u":
 	out_file = open(script_path, 'w+')
 	out_file.write(new_file)
 	sys.exit("Test Runner updated with success");
+elif sys.argv[1] == "-m" or sys.argv[1] == "-monitore":
+	sys.argv.pop(1)
+	monitore = True;
 
 if len(sys.argv) < 3:
 	sys.exit("Invalid number of parameters")
@@ -24,75 +30,84 @@ file_name = sys.argv[1][:-2]
 class_module = sys.argv[2]
 
 print "Received file is: ", file_name
+while True : 
+	if os.path.isfile(file_name):
+		os.remove(file_name)
 
-if os.path.isfile(file_name):
-	os.remove(file_name)
+	print "Compiling " + file_name + ".c to " + file_name 
+	os.system("gcc " + file_name + ".c -o " + file_name)
 
-print "Compiling " + file_name + ".c to " + file_name 
-os.system("gcc " + file_name + ".c -o " + file_name)
+	if not os.path.isfile(file_name): 
+		sys.exit('\033[91m' + " Error during compilation" + '\033[0m');
 
-if not os.path.isfile(file_name): 
-	sys.exit('\033[91m' + " Error during compilation" + '\033[0m');
+		
+	lab_number = file_name[0].upper() +  file_name[1:]
 
-	
-lab_number = file_name[0].upper() +  file_name[1:]
+	inputs = []
+	expected_outputs = []
+	outputs = [];
+	outputs.append("");
 
-inputs = []
-expected_outputs = []
-outputs = [];
-outputs.append("");
-
-print '\033[93mLOADING TESTS\033[0m'
-for i in range(1,7):
-	inputs.append(requests.get('https://susy.ic.unicamp.br:9999/' + class_module + '/' + lab_number + '/dados/arq0'+str(i)+'.in', verify=False).text)
-	expected_outputs.append(requests.get('https://susy.ic.unicamp.br:9999/' + class_module + '/' + lab_number + '/dados/arq0'+str(i)+'.res', verify=False).text)
+	print '\033[93mLOADING TESTS\033[0m'
+	for i in range(1,7):
+		inputs.append(requests.get('https://susy.ic.unicamp.br:9999/' + class_module + '/' + lab_number + '/dados/arq0'+str(i)+'.in', verify=False).text)
+		expected_outputs.append(requests.get('https://susy.ic.unicamp.br:9999/' + class_module + '/' + lab_number + '/dados/arq0'+str(i)+'.res', verify=False).text)
 
 
-out_file = open('outfile', 'w+')
-out_file.close()
-
-failed = 0
-
-for i in range(0,6):
-	print  '\033[93m' + "------------------------------------------" + '\033[0m'
-	print '\033[93m' + "-------------STARTING ("+str(i+1)+"/6)---------------" + '\033[0m'
-	in_file = open('infile', 'w+')
-	in_file.write(inputs[i])
-	in_file.close()
-	os.system("./"+file_name + " < infile" + " > outfile")
-
-	out_file = open('outfile', 'r')
-	output_resulted = out_file.read()
-	output_lines = output_resulted.splitlines()
-
-	debug_output = ""
-	real_output = ""
-	for line in output_lines:
-		if line[0 : 4] == "[DB]":
-			debug_output += line[4:] + '\n'
-		else:
-			real_output += line  + '\n'
-
+	out_file = open('outfile', 'w+')
 	out_file.close()
 
-	if real_output == expected_outputs[i]:
-		print "TEST "+str(i+1)+ '\033[92m' + " SUCCESS" + '\033[0m'
+	failed = 0
+
+	for i in range(0,6):
+		print  '\033[93m' + "------------------------------------------" + '\033[0m'
+		print '\033[93m' + "-------------STARTING ("+str(i+1)+"/6)---------------" + '\033[0m'
+		in_file = open('infile', 'w+')
+		in_file.write(inputs[i])
+		in_file.close()
+		os.system("./"+file_name + " < infile" + " > outfile")
+
+		out_file = open('outfile', 'r')
+		output_resulted = out_file.read()
+		output_lines = output_resulted.splitlines()
+
+		debug_output = ""
+		real_output = ""
+		for line in output_lines:
+			if line[0 : 4] == "[DB]":
+				debug_output += line[4:] + '\n'
+			else:
+				real_output += line  + '\n'
+
+		out_file.close()
+
+		if real_output == expected_outputs[i]:
+			print "TEST "+str(i+1)+ '\033[92m' + " SUCCESS" + '\033[0m'
+		else:
+			failed += 1
+			print "TEST "+str(i+1) + '\033[91m' + " FAILED" + '\033[0m'
+			print "EXPECTED\n" + expected_outputs[i]
+			print "FOUND\n" + real_output
+
+		if debug_output != "":
+			print '\033[93m' + "DEBUG MESSAGES:" + '\033[0m\n' + debug_output
+
+	print '\033[93m' + "------------------------------------------" + '\033[0m'
+	print "Tests finished running with success"
+	if failed == 0:
+		print "All tests passed!. :D"
 	else:
-		failed += 1
-		print "TEST "+str(i+1) + '\033[91m' + " FAILED" + '\033[0m'
-		print "EXPECTED\n" + expected_outputs[i]
-		print "FOUND\n" + real_output
+		print str(failed), "tests out of 6 have failed. :-("
 
-	if debug_output != "":
-		print '\033[93m' + "DEBUG MESSAGES:" + '\033[0m\n' + debug_output
+	os.remove('infile')
+	os.remove('outfile')
+	os.remove(file_name)
 
-print '\033[93m' + "------------------------------------------" + '\033[0m'
-print "Tests finished running with success"
-if failed == 0:
-	print "All tests passed!. :D"
-else:
-	print str(failed), "tests out of 6 have failed. :-("
-
-os.remove('infile')
-os.remove('outfile')
-os.remove(file_name)
+	if not monitore:
+		break
+	else:
+		mod_date_first = os.stat(file_name + ".c")[8]
+		mod_date_new = os.stat(file_name + ".c")[8]
+		while mod_date_new == mod_date_first:
+			mod_date_new = os.stat(file_name + ".c")[8]
+			time.sleep(1)

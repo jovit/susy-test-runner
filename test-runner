@@ -9,11 +9,11 @@ import time
 
 import argcomplete, argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("command",choices=['update', 'monitore', 'run','m','u', 'r'])
-parser.add_argument("file")
+parser.add_argument("command",choices=['update', 'monitore', 'run','m','u', 'r'], action="store_true")
+parser.add_argument("file", action="store_true")
 parser.add_argument("class_module",choices=['eb302a','mc102abcd','mc102ef','mc102gh','mc102ij','mc102klmn','mc102op',
 	'mc102qr','mc102st','mc102uvxz','mc102wy','mc202bc','mc202d','mc346a','mc404abe','mc404c','mc458ab','mc613ab',
-	'mc658ab','mc833ab','mc999','mo644a','si100a','si100b','tt314a'])
+	'mc658ab','mc833ab','mc999','mo644a','si100a','si100b','tt314a'], action="store_true")
 argcomplete.autocomplete(parser)
 args = parser.parse_args()
 

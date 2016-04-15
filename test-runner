@@ -1,9 +1,18 @@
 #!/usr/bin/env python
+# PYTHON_ARGCOMPLETE_OK
 import os
 import requests
 import sys
 from subprocess import call
 import time
+
+
+import argcomplete, argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("-u", "-update", action='store_true' help="Updates the script from GitHub repository")
+parser.add_argument("-m", "-modify", action='store_true' help="Keeps listening for changes in the file")
+argcomplete.autocomplete(parser)
+args = parser.parse_args()
 
 if len(sys.argv) < 2:
 	sys.exit("Invalid number of parameters")

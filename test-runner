@@ -9,8 +9,11 @@ import time
 
 import argcomplete, argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("-u", "-update", action='store_true', help="Updates the script from GitHub repository")
-parser.add_argument("-m", "-modify", action='store_true', help="Keeps listening for changes in the file")
+parser.add_argument("command",choices=['update', 'monitore', 'run','m','u', 'r'])
+parser.add_argument("file")
+parser.add_argument("class_module",choices=['eb302a','mc102abcd','mc102ef','mc102gh','mc102ij','mc102klmn','mc102op',
+	'mc102qr','mc102st','mc102uvxz','mc102wy','mc202bc','mc202d','mc346a','mc404abe','mc404c','mc458ab','mc613ab',
+	'mc658ab','mc833ab','mc999','mo644a','si100a','si100b','tt314a'])
 argcomplete.autocomplete(parser)
 args = parser.parse_args()
 
@@ -19,24 +22,25 @@ if len(sys.argv) < 2:
 
 monitore = False;
 
-if sys.argv[1] == "-update" or sys.argv[1] == "-u":
+if args.command == "update" or args.command == "u":
 	script_path = os.path.realpath(__file__)
 	new_file = requests.get('https://raw.githubusercontent.com/jovit/susy-test-runner/master/test-runner').text
 	out_file = open(script_path, 'w+')
 	out_file.write(new_file)
 	sys.exit("Test Runner updated with success");
-elif sys.argv[1] == "-m" or sys.argv[1] == "-monitore":
-	sys.argv.pop(1)
+elif args.command == "r" or args.command == "run":
+	monitore = False;
+elif args.command == "m" or args.command == "monitore":
 	monitore = True;
 
 if len(sys.argv) < 3:
 	sys.exit("Invalid number of parameters")
 
-if not os.path.isfile(sys.argv[1]):
-	sys.exit("File '" + sys.argv[1] + "' not found.")
+if not os.path.isfile(args.file):
+	sys.exit("File '" + args.file + "' not found.")
 
-file_name = sys.argv[1][:-2]
-class_module = sys.argv[2]
+file_name = args.file[:-2]
+class_module = args.class_module
 
 print "Received file is: ", file_name
 while True : 

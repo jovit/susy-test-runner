@@ -3,10 +3,10 @@ Automated test runner for labs from Unicamp's SuSy
 
 
 # Instalation
-*Clone the repository
-*pip
-  *if you don't have pip installed, click [here](https://pip.pypa.io/en/stable/installing/)
-* Run setup.sh
+ *Clone the repository
+ *pip
+   *if you don't have pip installed, click [here](https://pip.pypa.io/en/stable/installing/)
+ * Run setup.sh
 
 # Usage
 Run with `test-runner [command] [file] [class]`

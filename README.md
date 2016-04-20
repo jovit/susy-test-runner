@@ -17,4 +17,4 @@ Run with `test-runner [command] [file] [class]`
   * run/r - runs the tests for the file
   * monitore/m - keeps listening the file for changes
 
-**Note: ** The file must have the name of the lab that is going to be tested
+**Note:** The file must have the name of the lab that is going to be tested

@@ -6,13 +6,10 @@ except ImportError:
 config = {
     'description': 'Test Runner For Susy',
     'author': 'Joao Vitor Araki Goncalves',
-    'url': 'URL to get it at.',
-    'download_url': 'Where to download it.',
-    'author_email': 'My email.',
+    'author_email': 'joao_vitor_araki_goncalves@hotmail.com',
     'version': '0.1',
     'install_requires': ['nose','requests','argcomplete'],
     'scripts': ['bin/test-runner'],
-    'packages': ['NAME'],
     'name': 'test-runner'
 }
 

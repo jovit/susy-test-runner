@@ -9,7 +9,7 @@ import time
 
 import argcomplete, argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("command", choices=['monitore','run','m','r'], default='run')
+parser.add_argument("command", choices=['monitore','run','m','r', 'debug', 'd'], default='run')
 parser.add_argument("file",  default=os.getcwd(), nargs='?')
 parser.add_argument("class_module",choices=['eb302a','mc102abcd','mc102ef','mc102gh','mc102ij','mc102klmn','mc102op',
 	'mc102qr','mc102st','mc102uvxz','mc102wy','mc202bc','mc202d','mc346a','mc404abe','mc404c','mc458ab','mc613ab',
@@ -21,17 +21,12 @@ if len(sys.argv) < 2:
 	sys.exit("Invalid number of parameters")
 
 monitore = False;
+debug = False;
 
-if args.command == "update" or args.command == "u":
-	script_path = os.path.realpath(__file__)
-	new_file = requests.get('https://raw.githubusercontent.com/jovit/susy-test-runner/master/test-runner').text
-	out_file = open(script_path, 'w+')
-	out_file.write(new_file)
-	sys.exit("Test Runner updated with success");
-elif args.command == "r" or args.command == "run":
-	monitore = False;
-elif args.command == "m" or args.command == "monitore":
-	monitore = True;
+if args.command == "m" or args.command == "monitore":
+	monitore = True
+elif args.command == "d" or args.command == "debug":
+	debug = True
 
 if len(sys.argv) < 3:
 	sys.exit("Invalid number of parameters")
@@ -96,7 +91,7 @@ while True :
 
 		if real_output == expected_outputs[i]:
 			print "TEST "+str(i+1)+ '\033[92m' + " SUCCESS" + '\033[0m'
-		else:
+		elif not debug:
 			failed += 1
 			print "TEST "+str(i+1) + '\033[91m' + " FAILED" + '\033[0m'
 			print "EXPECTED\n" + expected_outputs[i]

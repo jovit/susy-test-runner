@@ -91,11 +91,12 @@ while True :
 
 		if real_output == expected_outputs[i]:
 			print "TEST "+str(i+1)+ '\033[92m' + " SUCCESS" + '\033[0m'
-		elif not debug:
+		else:
 			failed += 1
 			print "TEST "+str(i+1) + '\033[91m' + " FAILED" + '\033[0m'
-			print "EXPECTED\n" + expected_outputs[i]
-			print "FOUND\n" + real_output
+			if not debug:
+				print "EXPECTED\n" + expected_outputs[i]
+				print "FOUND\n" + real_output
 
 		if debug_output != "":
 			print '\033[93m' + "DEBUG MESSAGES:" + '\033[0m\n' + debug_output

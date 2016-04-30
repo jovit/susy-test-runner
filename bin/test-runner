@@ -37,6 +37,20 @@ if not os.path.isfile(args.file):
 file_name = args.file[:-2]
 class_module = args.class_module
 
+lab_names_raw = requests.get('https://susy.ic.unicamp.br:9999/' + class_module + '/', verify=False).text
+
+lab_names_lines = lab_names_raw.split('\n')
+lab_names_line = lab_names_lines.pop()
+lab_names = []
+print lab_names_lines
+while lab_names_line != "</tbody>":
+	while lab_names_line != "<td>":
+		lab_names_line = lab_names_lines.pop()
+	lab_names_line = lab_names_lines.pop()
+	lab_names.append(lab_names_line[])
+
+
+
 print "Received file is: ", file_name
 while True : 
 	if os.path.isfile(file_name):

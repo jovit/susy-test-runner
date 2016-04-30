@@ -5,7 +5,7 @@ import requests
 import sys
 from subprocess import call
 import time
-
+import re
 
 import argcomplete, argparse
 parser = argparse.ArgumentParser()
@@ -39,16 +39,14 @@ class_module = args.class_module
 
 lab_names_raw = requests.get('https://susy.ic.unicamp.br:9999/' + class_module + '/', verify=False).text
 
-lab_names_lines = lab_names_raw.split('\n')
-lab_names_line = lab_names_lines.pop()
+lab_names_lines = re.split('(<[^>]*>)', lab_names_raw)
 lab_names = []
-print lab_names_lines
-while lab_names_line != "</tbody>":
-	while lab_names_line != "<td>":
-		lab_names_line = lab_names_lines.pop()
-	lab_names_line = lab_names_lines.pop()
-	lab_names.append(lab_names_line[])
-
+lab_names_lines = [x for x in lab_names_lines if x]
+for i in range(0,len(lab_names_lines)):
+	if lab_names_lines[i] == '</TABLE>':
+		break
+	if lab_names_lines[i] == '<TR>':
+		lab_names.append(lab_names_lines[i+3])
 
 
 print "Received file is: ", file_name
@@ -62,8 +60,12 @@ while True :
 	if not os.path.isfile(file_name): 
 		sys.exit('\033[91m' + " Error during compilation" + '\033[0m');
 
-		
-	lab_number = file_name[0].upper() +  file_name[1:]
+	lab_number = ""
+	for lab_name in lab_names:
+		if lab_name.upper() == file_name.upper():
+			lab_number = lab_name
+			break
+
 
 	inputs = []
 	expected_outputs = []

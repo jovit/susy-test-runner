@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # PYTHON_ARGCOMPLETE_OK
 import os
 import requests
@@ -87,7 +88,7 @@ while True :
 		print  '\033[93m' + "------------------------------------------" + '\033[0m'
 		print '\033[93m' + "-------------STARTING ("+str(i+1)+"/6)---------------" + '\033[0m'
 		in_file = open('infile', 'w+')
-		in_file.write(inputs[i])
+		in_file.write(inputs[i].encode('utf-8'))
 		in_file.close()
 		os.system("./"+file_name + " < infile" + " > outfile")
 

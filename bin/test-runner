@@ -7,6 +7,7 @@ import sys
 from subprocess import call
 import time
 import re
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 import argcomplete, argparse
 parser = argparse.ArgumentParser()
@@ -37,6 +38,8 @@ if not os.path.isfile(args.file):
 
 file_name = args.file[:-2]
 class_module = args.class_module
+
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 lab_names_raw = requests.get('https://susy.ic.unicamp.br:9999/' + class_module + '/', verify=False).text
 

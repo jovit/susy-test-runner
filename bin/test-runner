@@ -106,7 +106,7 @@ while True :
 
 		out_file.close()
 
-		if real_output == expected_outputs[i]:
+		if real_output.decode("utf-8") == expected_outputs[i]:
 			print "TEST "+str(i+1)+ '\033[92m' + " SUCCESS" + '\033[0m'
 		else:
 			failed += 1

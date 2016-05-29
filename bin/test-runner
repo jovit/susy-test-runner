@@ -59,7 +59,7 @@ while True :
 		os.remove(file_name)
 
 	print "Compiling " + file_name + ".c to " + file_name 
-	os.system("gcc " + file_name + ".c -o " + file_name + " -lm")
+	os.system("gcc -Wall -std=c99 -pedantic *.c -o " + file_name + " -lm")
 
 	if not os.path.isfile(file_name): 
 		sys.exit('\033[91m' + " Error during compilation" + '\033[0m');

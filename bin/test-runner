@@ -11,7 +11,7 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 import argcomplete, argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("command", choices=['monitore','run','m','r', 'debug', 'd'], default='run')
+parser.add_argument("command", choices=['monitore','run','m','r', 'debug', 'd', 'compile', 'c'], default='run')
 parser.add_argument("file",  default=os.getcwd(), nargs='?')
 parser.add_argument("class_module",choices=['eb302a','mc102abcd','mc102ef','mc102gh','mc102ij','mc102klmn','mc102op',
 	'mc102qr','mc102st','mc102uvxz','mc102wy','mc202bc','mc202d','mc346a','mc404abe','mc404c','mc458ab','mc613ab',
@@ -60,6 +60,9 @@ while True :
 
 	print "Compiling " + file_name + ".c to " + file_name 
 	os.system("gcc -Wall -std=c99 -pedantic *.c -o " + file_name + " -lm")
+	
+	if args.command == "compile" or args.command == "c":
+		break;
 
 	if not os.path.isfile(file_name): 
 		sys.exit('\033[91m' + " Error during compilation" + '\033[0m');

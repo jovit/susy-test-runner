@@ -18,5 +18,7 @@ Run with `test-runner [command] [file] [class]`
   * monitore/m - keeps listening the file for changes
   * debug/d - shows only debug the messages
 
-**Note:** The file must have the name of the lab that is going to be tested
-E.g. if the lab name is LabSemanal01, the name of the source file must be **labSemanal01.c**
+**Notes:** 
+  * The main file must have the name of the lab that is going to be tested E.g. if the lab name is LabSemanal01, the name of the source file must be **labSemanal01.c**
+  * The files must be in a isolated directory, with only the .c files from the lab being tested
+
